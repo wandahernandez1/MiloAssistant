@@ -1,5 +1,5 @@
 # MiloAssistant
-App en desarrollo de Assistant
+App en desarrollo.
 
 <p align="center">
   <img src="milo-avatar.png" alt="MiloAssistant Logo" width="180"/>
