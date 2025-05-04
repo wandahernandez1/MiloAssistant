@@ -2,7 +2,7 @@
 App en desarrollo de MiloAssitant.
 
 <p align="center">
-  <img src="assets/milo-avatar.png" alt="MiloAssistant Logo" width="180"/>
+  <img src="milo-avatar.png" alt="MiloAssistant Logo" width="180"/>
 </p>
 
 # MiloAssistant
