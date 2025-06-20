@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiloAssistant - Notas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./css/notes.css">
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="./index.html"> <img src="./img/milo.jpg" alt="MiloAssistant Logo" class="logo"></a>
+            <span>MiloAssistant</span>
+        </div>
+        <nav class="navbar-right">
+            <ul>
+                <li><a href="#">Funcionalidades</a></li>
+                <li><a href="./comoUsarMilo.html">Como usar Milo</a></li>
+                <li><a href="./novedades.html">Novedades</a></li>
+                <li class="profile-menu-container">
+
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <button class="sidebar-button active">
+                <i class="fas fa-file-alt icon"></i>
+                <span>Notas</span>
+            </button>
+            <button class="sidebar-button">
+                <i class="fas fa-calendar-alt icon"></i>
+                <span>Organiza tu calendario</span>
+            </button>
+        </aside>
+
+        <main class="content-area">
+            <section class="notes-section">
+                <div class="section-header">
+                    <h2>Tus Notas</h2>
+                    <button class="new-note-button" id="newNoteBtn">
+                        <i class="fas fa-plus"></i> Nueva nota
+                    </button>
+                </div>
+
+                <!-- agregar/editar notas -->
+                <div class="note-input-card" id="noteInputCard" style="display: none;">
+                    <input type="text" placeholder="Agregar título" class="note-title-input" id="noteTitleInput">
+                    <textarea placeholder="Escribe tu nota..." class="note-content-textarea"
+                        id="noteContentTextarea"></textarea>
+                    <div class="note-actions">
+                        <button class="cancel-button" id="cancelNoteBtn">Cancelar</button>
+                        <button class="save-button" id="saveNoteBtn">Guardar</button>
+                    </div>
+                </div>
+
+                <h2 class="notes-list-title">Notas Guardadas</h2>
+                <div class="notes-list-container" id="notesListContainer">
+                    <!-- carga de notas -->
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="./js/authLogin.js"></script>
+
+    <script src="./js/notes.js"></script>
+</body>
+
+</html>
