@@ -7,13 +7,6 @@
   --navbar-height: 80px;
 }
 
-body {
-  font-family: "Poppins", sans-serif;
-  background-color: var(--primary-bg-color);
-  color: var(--text-color);
-  line-height: 1.6;
-}
-
 #particles-js {
   position: fixed;
   width: 100%;
@@ -23,13 +16,13 @@ body {
   z-index: -1;
 }
 
-.how-to-use-container {
+.novedades-container {
   padding: 40px 5%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.intro-section-how-to {
+.intro-section-novedades {
   text-align: center;
   margin-bottom: 60px;
   max-width: 800px;
@@ -37,29 +30,21 @@ body {
   margin-right: auto;
 }
 
-.intro-section-how-to h1 {
-  font-size: clamp(1.8em, 5vw, 2.8em);
+.intro-section-novedades h1 {
+  font-size: clamp(2.2em, 5vw, 2.8em);
   font-weight: 700;
   margin-bottom: 20px;
 }
 
-.intro-section-how-to .highlight {
-  color: var(--highlight-color);
-}
-
-.intro-section-how-to p {
-  font-size: clamp(1em, 2.5vw, 1.1em);
-  opacity: 0.9;
-}
-
-.features-grid {
+.news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 35px;
   width: 100%;
 }
 
-.feature-card {
+/* estilo de tarjetas */
+.news-card {
   position: relative;
   background: rgba(44, 39, 68, 0.55);
   backdrop-filter: blur(12px);
@@ -72,7 +57,7 @@ body {
   transform-style: preserve-3d;
 }
 
-.feature-card:hover {
+.news-card:hover {
   --mouse-x: 50%;
   --mouse-y: 50%;
   background: radial-gradient(
@@ -83,7 +68,7 @@ body {
     rgba(44, 39, 68, 0.55);
 }
 
-.feature-card::before {
+.news-card::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -102,7 +87,7 @@ body {
   transition: opacity 0.4s ease;
 }
 
-.feature-card:hover::before {
+.news-card:hover::before {
   opacity: 1;
 }
 
@@ -112,7 +97,7 @@ body {
   }
 }
 
-.feature-card .icon {
+.news-card .icon {
   font-size: 2.8em;
   color: var(--highlight-color);
   margin-bottom: 25px;
@@ -120,22 +105,24 @@ body {
   transition: all 0.3s ease;
 }
 
-.feature-card:hover .icon {
-  transform: scale(1.1);
+.news-card:hover .icon {
+  transform: scale(1.1) translateY(-5px);
   color: #fff;
   text-shadow: 0 0 25px var(--highlight-color);
 }
 
-.feature-card h3 {
+.news-card h3 {
   font-size: 1.4em;
   margin-bottom: 15px;
 }
 
-.feature-card p {
+.news-card p {
   font-size: 0.95em;
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.7;
 }
+
+/* El boton de volver  */
 
 .back-button {
   position: absolute;
@@ -165,12 +152,6 @@ body {
 }
 
 @media (max-width: 768px) {
-  .intro-section-how-to h1 {
-    font-size: 2.2em;
-  }
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
   .back-button {
     top: 120px;
     left: 15px;

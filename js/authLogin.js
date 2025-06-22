@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (loggedInUser && editProfileForm) {
             document.getElementById('profileUsername').value = loggedInUser.username || '';
             document.getElementById('profileEmail').value = loggedInUser.email || '';
-            // Password is not loaded for security reasons.
+
         }
     }
 
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             showMessage('¡Registro exitoso! Ya puedes iniciar sesión.', 'success');
             setTimeout(() => {
-                if (registerCard) loginCard.style.display = 'flex'; // Go back to login form
+                if (registerCard) loginCard.style.display = 'flex';
                 if (registerCard) registerCard.style.display = 'none';
                 registerForm.reset();
             }, 1000);

@@ -9,96 +9,79 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="./css/nodedades.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/novedades.css">
 </head>
 
 <body>
+    <div id="particles-js"></div>
+
     <header class="navbar">
         <div class="navbar-left">
-            <a href="./index.html"> <img src="./img/milo.jpg" alt="MiloAssistant Logo" class="logo"></a>
             <span>MiloAssistant</span>
         </div>
         <nav class="navbar-right">
             <ul>
                 <li><a href="#">Funcionalidades</a></li>
                 <li><a href="./comoUsarMilo.html">Como usar Milo</a></li>
-                <li><a href="#" class="active-nav">Novedades</a></li>
-                <li class="profile-menu-container"></li>
+                <li><a href="novedades.html" class="active-nav">Novedades</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="novedades-container">
-        <h1 class="page-title">Entérate de todas las nuevas<br>características y mejoras de Milo.</h1>
+        <a href="index.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            <span>Volver</span>
+        </a>
+        <section class="intro-section-novedades">
+            <h1>Entérate de las nuevas características y mejoras de Milo.</h1>
+        </section>
 
         <section class="news-grid">
             <div class="news-card">
-                <div class="card-icon-placeholder">
-                    <i class="fas fa-magic icon"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Integración de IA Conversacional Mejorada</h3>
-                    <p>Milo ahora es más natural y fluido en sus respuestas gracias a la integración de Gemini API,
-                        ofreciendo una asistencia más contextual y empática. </p>
-                </div>
+                <i class="fas fa-magic icon"></i>
+                <h3>IA Conversacional Mejorada</h3>
+                <p>Milo ahora es más natural y fluido en sus respuestas gracias a la integración de Gemini API,
+                    ofreciendo una asistencia más contextual y empática.</p>
             </div>
-
             <div class="news-card">
-                <div class="card-icon-placeholder">
-                    <i class="fas fa-cloud-sun icon"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Consulta del Clima en Tiempo Real</h3>
-                    <p>Mantente siempre informado. MiloAssistant ahora consulta el clima en tiempo real según tu
-                        ubicación geográfica, con datos provistos por OpenWeatherMap API. </p>
-                </div>
+                <i class="fas fa-cloud-sun icon"></i>
+                <h3>Clima en Tiempo Real</h3>
+                <p>Mantente siempre informado. Milo ahora consulta el clima en tiempo real según tu ubicación, gracias a
+                    la API de OpenWeatherMap.</p>
             </div>
-
             <div class="news-card">
-                <div class="card-icon-placeholder">
-                    <i class="fas fa-newspaper icon"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Noticias Relevantes y Actualizadas</h3>
-                    <p>Accede a las noticias más importantes y actualizadas diariamente, con la posibilidad de filtrar
-                        por país y categoría, directamente a través de NewsAPI. </p>
-                </div>
+                <i class="fas fa-newspaper icon"></i>
+                <h3>Noticias Relevantes</h3>
+                <p>Accede a las noticias más importantes y actualizadas diariamente, con la posibilidad de filtrar por
+                    país y categoría, a través de NewsAPI.</p>
             </div>
-
             <div class="news-card">
-                <div class="card-icon-placeholder">
-                    <i class="fas fa-tasks icon"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Gestión Centralizada de Tareas y Notas</h3>
-                    <p>Hemos optimizado la forma en que organizas tus tareas y notas. Disfruta de una gestión más
-                        intuitiva y centralizada para tus recordatorios y agenda. </p>
-                </div>
+                <i class="fas fa-tasks icon"></i>
+                <h3>Gestión de Tareas y Notas</h3>
+                <p>Hemos optimizado la forma en que organizas tus tareas. Disfruta de una gestión más intuitiva y
+                    centralizada para tus recordatorios.</p>
             </div>
-
             <div class="news-card">
-                <div class="card-icon-placeholder">
-                    <i class="fas fa-mobile-alt icon"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Milo en tu Bolsillo: Próxima PWA Móvil</h3>
-                    <p>Estamos trabajando para que Milo sea aún más accesible. Prepárate para la versión móvil con
-                        Progressive Web App (PWA), para una experiencia fluida en cualquier dispositivo. </p>
-                </div>
+                <i class="fas fa-mobile-alt icon"></i>
+                <h3>Próxima PWA Móvil</h3>
+                <p>Estamos trabajando para que Milo sea aún más accesible. Prepárate para la versión móvil con
+                    Progressive Web App (PWA) para una experiencia fluida.</p>
             </div>
-
             <div class="news-card">
-                <div class="card-icon-placeholder">
-                    <i class="fas fa-user-circle icon"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Perfiles de Usuario Optimizados y Personalización</h3>
-                    <p>La base de datos se ha optimizado para perfiles de usuario, abriendo camino a futuras
-                        personalizaciones basadas en tus hábitos y preferencias. </p>
-                </div>
+                <i class="fas fa-user-circle icon"></i>
+                <h3>Perfiles de Usuario Optimizados</h3>
+                <p>La base de datos se ha optimizado para perfiles de usuario, abriendo camino a futuras
+                    personalizaciones basadas en tus hábitos y preferencias.</p>
             </div>
         </section>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="./js/particles-config.js"></script>
+    <script src="./js/novedades_anim.js"></script>
 </body>
 
 </html>
