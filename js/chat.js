@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatMessagesContainer = document.getElementById('chat-messages');
     const weatherCard = document.getElementById('weather-card');
     const tasksCard = document.getElementById('tasks-card');
+    const newsCard = document.getElementById('news-card');
     const actionCardsSection = document.getElementById('actionCardsSection');
     const introSectionWrapper = document.getElementById('introSectionWrapper');
     const chatSection = document.getElementById('chatSection');
@@ -13,26 +14,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const minimizeChatBtn = document.getElementById('minimizeChatBtn');
 
     let chatActivated = false;
-
-
     const OPENWEATHERMAP_API_KEY = '361221015a8e10e6cd9a6d4725732fe4';
+
 
 
     function displayMessage(sender, message, isHtml = false) {
         const messageElement = document.createElement('div');
         messageElement.classList.add('chat-message');
-        messageElement.classList.add(sender); // 
+        messageElement.classList.add(sender);
 
-        if (isHtml) {
-            messageElement.innerHTML = message;
+        if (sender === 'milo') {
+            if (typeof marked === 'function') {
+                messageElement.innerHTML = marked.parse(message);
+            } else {
+                // Si la librería no carga, usamos un reemplazo simple para la negrita como respaldo.
+                messageElement.innerHTML = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            }
         } else {
             messageElement.textContent = message;
         }
-        chatMessagesContainer.appendChild(messageElement);
 
+        chatMessagesContainer.appendChild(messageElement);
         chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
     }
-
 
     function getUserLocation() {
         return new Promise((resolve, reject) => {
@@ -62,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(url);
             const data = await response.json();
             if (data.address) {
-
                 return data.address.city || data.address.town || data.address.village || 'Tu ubicación';
             }
             return 'Tu ubicación';
@@ -75,18 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function getWeather(lat, lon) {
         if (!OPENWEATHERMAP_API_KEY || OPENWEATHERMAP_API_KEY === 'YOUR_OPENWEATHERMAP_API_KEY') {
-            displayMessage('milo', 'Ups! Para consultar el clima, necesito tu clave API de OpenWeatherMap. Por favor, configúrala en el archivo chat.js.');
+            displayMessage('milo', 'Ups! Para consultar el clima, necesito tu clave API de OpenWeatherMap..');
             return;
         }
 
-
         const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHERMAP_API_KEY}&units=metric&lang=es`;
-
         const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OPENWEATHERMAP_API_KEY}&units=metric&lang=es`;
 
         try {
             displayMessage('milo', 'Un momento, estoy consultando el pronóstico del clima...');
-
 
             const currentWeatherResponse = await fetch(currentWeatherUrl);
             if (!currentWeatherResponse.ok) {
@@ -94,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`Error de la API de clima actual: ${currentWeatherResponse.status} - ${errorData.message || 'Desconocido'}`);
             }
             const currentWeatherData = await currentWeatherResponse.json();
-
 
             const forecastResponse = await fetch(forecastUrl);
             if (!forecastResponse.ok) {
@@ -107,9 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let weatherMessage = `¡Claro! Aquí tienes el clima para **${cityName}**:<br><br>`;
 
-
             if (currentWeatherData.main && currentWeatherData.weather && currentWeatherData.weather.length > 0) {
-                const currentTemp = currentWeatherData.main.temp.toFixed(0); // Redondeado
+                const currentTemp = currentWeatherData.main.temp.toFixed(0);
                 const feelsLikeTemp = currentWeatherData.main.feels_like.toFixed(0);
                 const weatherDescription = currentWeatherData.weather[0].description;
                 const iconCode = currentWeatherData.weather[0].icon;
@@ -120,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 weatherMessage += 'No pude obtener los datos del clima actual con precisión.<br><br>';
             }
 
-
             weatherMessage += 'Aquí te dejo el pronóstico para los próximos días:<br>';
             if (forecastData.list && forecastData.list.length > 0) {
                 const dailyForecasts = {};
@@ -130,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 forecastData.list.forEach(item => {
                     const itemDate = new Date(item.dt * 1000);
                     itemDate.setHours(0, 0, 0, 0);
-
 
                     if (itemDate.getTime() >= today.getTime()) {
                         const dayKey = itemDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'numeric', day: 'numeric' });
@@ -153,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     return new Date(a) - new Date(b);
                 });
 
-
                 for (let i = 0; i < Math.min(sortedDays.length, 7); i++) {
                     const dayKey = sortedDays[i];
                     const daily = dailyForecasts[dayKey];
@@ -174,6 +169,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    async function getLocalNews() {
+        console.log(" Iniciando getLocalNews.");
+
+        const NEWS_API_KEY = '5ee6801a049547db820850d072b7cbb7';
+
+        try {
+            displayMessage('milo', 'Buscando las noticias más recientes...');
+            // endpoint /everything más robusto que busca todos los artículos sobre Argentina
+
+            const requestUrl = `https://newsapi.org/v2/everything?q=Argentina&language=es&sortBy=publishedAt&apiKey=${NEWS_API_KEY}`;
+
+            console.log("Intentando hacer fetch a la URL:", requestUrl);
+
+            const response = await fetch(requestUrl);
+
+            if (!response.ok) {
+                const errorBody = await response.json();
+                throw new Error(errorBody.message || `Error HTTP: ${response.status}`);
+            }
+
+            const newsData = await response.json();
+            console.log(" Datos JSON procesados desde /everything:", newsData);
+
+            if (newsData.articles && newsData.articles.length > 0) {
+                let newsMessage = 'Las noticias más interesantes sobre Argentina:<br><br>';
+                //  5 artículos más nuevos
+                newsData.articles.slice(0, 5).forEach(article => {
+                    newsMessage += `
+                    <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #555;">
+                        <strong>${article.title}</strong><br>
+                        <small>Fuente: ${article.source.name}</small><br>
+                        <a href="${article.url}" target="_blank" style="color: #9b59b6; text-decoration: none;">Leer más</a>
+                    </div>
+                `;
+                });
+                displayMessage('milo', newsMessage, true);
+            } else {
+                displayMessage('milo', 'No encontré noticias en este momento, parece haber un problema con el proveedor.');
+            }
+
+        } catch (error) {
+            console.error(" Ha ocurrido un error en el bloque try-catch:", error);
+            displayMessage('milo', `Lo siento, hubo un problema técnico: ${error.message}.`);
+        }
+    }
     function activateChat() {
         if (!chatActivated) {
             if (introSectionWrapper) {
@@ -190,7 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
             chatActivated = true;
         }
     }
-
 
     function deactivateChat() {
         if (chatActivated) {
@@ -233,28 +272,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1500);
     }
 
-
-    // Procesa la entrada del usuario y determina la intención.
     async function processUserInput(input) {
-
         activateChat();
+        displayMessage('user', input);
 
         const lowerInput = input.toLowerCase();
-
-        // Lógica para "Anotar Nota" 
         const annotationPhrases = ['anotar una nota:', 'anotar una nota', 'guarda esto como nota:', 'guarda esto como nota', 'crea una nota con:', 'crea una nota con'];
         let matchedPhrase = annotationPhrases.find(phrase => lowerInput.includes(phrase));
 
         if (matchedPhrase) {
             let noteContent = input.substring(input.toLowerCase().indexOf(matchedPhrase) + matchedPhrase.length).trim();
-
             if (noteContent.length > 0) {
-                let noteTitle = noteContent.split('.')[0].substring(0, 50).trim();
-                if (noteTitle.length === 0) {
-                    noteTitle = `Nota del chat - ${new Date().toLocaleDateString('es-ES')}`;
-                } else {
-                    noteTitle = `Nota: ${noteTitle.charAt(0).toUpperCase() + noteTitle.slice(1)}`; // Capitaliza la primera letra
-                }
+                let noteTitle = noteContent.split('.')[0].substring(0, 50).trim() || `Nota del chat - ${new Date().toLocaleDateString('es-ES')}`;
                 saveNoteFromChat(noteTitle, noteContent);
                 return;
             } else {
@@ -263,38 +292,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-
-
-        // Lógica de conversación 
-        if (lowerInput.includes('hola') || lowerInput.includes('buenos días') || lowerInput.includes('buenas tardes') || lowerInput.includes('buenas noches')) {
-            displayMessage('milo', '¡Hola! Me alegra que estés aquí. ¿En qué te puedo ayudar hoy?');
-            return;
-        }
-        if (lowerInput.includes('cómo estás') || lowerInput.includes('que tal')) {
-            displayMessage('milo', '¡Estoy genial, listo para ayudarte! ¿Y tú? ¿Hay algo que necesites de mí?');
-            return;
-        }
-        if (lowerInput.includes('quién eres') || lowerInput.includes('que eres') || lowerInput.includes('eres milo')) {
-            displayMessage('milo', '¡Soy Milo, tu asistente personal! Estoy aquí para hacer tu día a día más fácil, ayudándote con el clima, tus tareas y mucho más. 😊');
-            return;
-        }
-        if (lowerInput.includes('qué puedes hacer') || lowerInput.includes('que haces')) {
-            displayMessage('milo', 'Puedo ayudarte a consultar el clima actual y el pronóstico, y también a organizar tus tareas en la sección de notas. ¡Pregúntame lo que necesites!');
-            return;
-        }
-        if (lowerInput.includes('gracias') || lowerInput.includes('muchas gracias')) {
-            displayMessage('milo', 'De nada. ¡Para eso estoy! Si necesitas algo más, no dudes en preguntar. 😉');
-            return;
-        }
-        if (lowerInput.includes('adiós') || lowerInput.includes('chao') || lowerInput.includes('hasta luego')) {
-            displayMessage('milo', '¡Hasta pronto! Que tengas un excelente día. Estoy aquí si me necesitas. 👋');
-            return;
-        }
-
-
         if (lowerInput.includes('clima') || lowerInput.includes('tiempo')) {
             try {
-                displayMessage('milo', '¡Claro! Con gusto te ayudo a consultar el clima. ');
+                displayMessage('milo', '¡Claro! Dame un momento para consultar el clima.');
                 const location = await getUserLocation();
                 getWeather(location.lat, location.lon);
             } catch (error) {
@@ -302,33 +302,44 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else if (lowerInput.includes('tarea') || lowerInput.includes('organizar') || lowerInput.includes('notas')) {
             displayMessage('milo', '¡Perfecto! Veo que quieres organizar tus ideas. Puedes hacerlo fácilmente en la sección de notas. ¿Quieres que te dirija allí? <button id="goToNotesBtn" class="chat-action-button">Ir a Notas</button>', true);
+        } else if (lowerInput.includes('hola') || lowerInput.includes('buenos días')) {
+            displayMessage('milo', '¡Hola! Me alegra que estés aquí. ¿En qué te puedo ayudar hoy?');
+        } else if (lowerInput.includes('cómo estás') || lowerInput.includes('que tal')) {
+            displayMessage('milo', '¡Estoy genial, listo para ayudarte! ¿Y tú?');
+        } else if (lowerInput.includes('quién eres')) {
+            displayMessage('milo', 'Soy Milo, tu asistente personal. Estoy aquí para hacer tu día a día más fácil. 😊');
+        } else if (lowerInput.includes('qué puedes hacer') || lowerInput.includes('que haces')) {
+            displayMessage('milo', 'Puedo ayudarte a consultar el clima, y a organizar tus tareas y notas. ¡Pregúntame lo que necesites!');
+        } else if (lowerInput.includes('gracias')) {
+            displayMessage('milo', 'De nada. ¡Para eso estoy! Si necesitas algo más, no dudes en preguntar. 😉');
+        } else if (lowerInput.includes('adiós') || lowerInput.includes('chao')) {
+            displayMessage('milo', '¡Hasta pronto! Que tengas un excelente día. 👋');
+        } else if (lowerInput.includes('noticia') || lowerInput.includes('novedades locales')) {
+            // Llamada simplificada y correcta
+            getLocalNews();
+        } else if (lowerInput.includes('tarea') || lowerInput.includes('notas')) {
+            displayMessage('milo', '¡Perfecto! Veo que quieres organizar tus ideas. Puedes hacerlo fácilmente en la sección de notas. ¿Quieres que te dirija allí? <button id="goToNotesBtn" class="chat-action-button">Ir a Notas</button>', true);
         } else {
-
-            displayMessage('milo', 'Mmm, no estoy seguro de cómo ayudarte con eso. ¿Quizás quieres saber el clima o organizar tus tareas? Estoy aprendiendo a cada momento. 😊');
+            displayMessage('milo', 'Mmm, no estoy seguro de cómo ayudarte con eso. ¿Quizás quieres saber el clima o las noticias locales? Estoy aprendiendo a cada momento. 😊');
         }
     }
 
+    chatInput.addEventListener('focus', activateChat);
 
-    chatInput.addEventListener('focus', () => {
-        activateChat();
-    });
-
-
-    sendButton.addEventListener('click', () => {
+    const sendMessage = () => {
         const message = chatInput.value.trim();
         if (message) {
-            displayMessage('user', message);
             processUserInput(message);
             chatInput.value = '';
         }
-    });
+    };
 
+    sendButton.addEventListener('click', sendMessage);
     chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            sendButton.click();
+            sendMessage();
         }
     });
-
 
     chatMessagesContainer.addEventListener('click', (e) => {
         if (e.target.id === 'goToNotesBtn') {
@@ -336,20 +347,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
     if (minimizeChatBtn) {
-        minimizeChatBtn.addEventListener('click', () => {
-            deactivateChat();
-        });
+        minimizeChatBtn.addEventListener('click', deactivateChat);
     }
-
-
 
     if (weatherCard) {
         weatherCard.addEventListener('click', () => {
             activateChat();
             chatInput.value = 'Quiero saber el clima';
-            sendButton.click();
+            sendMessage();
         });
     }
 
@@ -357,9 +363,15 @@ document.addEventListener('DOMContentLoaded', () => {
         tasksCard.addEventListener('click', () => {
             activateChat();
             chatInput.value = 'Quiero organizar mis tareas';
-            sendButton.click();
+            sendMessage();
         });
     }
+    if (newsCard) {
+        newsCard.addEventListener('click', () => {
+            console.log("Tarjeta de noticias clickeada.");
+            activateChat();
+            getLocalNews();
+        });
 
-
+    }
 });

@@ -229,7 +229,6 @@ body {
   background-color: #5a6268;
 }
 
-/* Notes List Styles */
 .notes-list-title {
   font-size: 2em;
   color: var(--text-color);
@@ -262,7 +261,7 @@ body {
 }
 
 .note-item-content pre {
-  white-space: pre-wrap; /* Mantiene saltos de línea y rompe el texto */
+  white-space: pre-wrap; /* Mantiene saltos de linea y rompe el texto */
   font-family: inherit;
   font-size: 0.95em;
   color: #c0c0c0;
@@ -362,4 +361,28 @@ body {
     padding: 8px 15px;
     font-size: 0.85em;
   }
+}
+
+.back-button-sidebar {
+  margin: 0 0 15px 0;
+  padding: 10px 15px;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+  background-color: var(--secondary-bg-color);
+  color: white;
+  border: 1px solid var(--input-border-color);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button-sidebar:hover {
+  background-color: var(--highlight-color);
+  border-color: var(--highlight-color);
+  transform: translateY(-1px);
 }

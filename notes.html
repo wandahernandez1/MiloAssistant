@@ -16,7 +16,6 @@
 <body>
     <header class="navbar">
         <div class="navbar-left">
-            <a href="./index.html"> <img src="./img/milo.jpg" alt="MiloAssistant Logo" class="logo"></a>
             <span>MiloAssistant</span>
         </div>
         <nav class="navbar-right">
@@ -24,15 +23,16 @@
                 <li><a href="#">Funcionalidades</a></li>
                 <li><a href="./comoUsarMilo.html">Como usar Milo</a></li>
                 <li><a href="./novedades.html">Novedades</a></li>
-                <li class="profile-menu-container">
-
-                </li>
+                <li class="profile-menu-container"></li>
             </ul>
         </nav>
     </header>
 
     <div class="main-container">
         <aside class="sidebar">
+            <button onclick="history.back()" class="back-button-sidebar">
+                <i class="fas fa-arrow-left"></i> <span>Volver</span>
+            </button>
             <button class="sidebar-button active">
                 <i class="fas fa-file-alt icon"></i>
                 <span>Notas</span>
@@ -52,7 +52,6 @@
                     </button>
                 </div>
 
-                <!-- agregar/editar notas -->
                 <div class="note-input-card" id="noteInputCard" style="display: none;">
                     <input type="text" placeholder="Agregar título" class="note-title-input" id="noteTitleInput">
                     <textarea placeholder="Escribe tu nota..." class="note-content-textarea"
@@ -65,13 +64,11 @@
 
                 <h2 class="notes-list-title">Notas Guardadas</h2>
                 <div class="notes-list-container" id="notesListContainer">
-                    <!-- carga de notas -->
                 </div>
             </section>
         </main>
     </div>
     <script src="./js/authLogin.js"></script>
-
     <script src="./js/notes.js"></script>
 </body>
 
