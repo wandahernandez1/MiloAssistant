@@ -7,22 +7,20 @@
   --navbar-height: 80px;
 }
 
-#particles-js {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: -1;
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--primary-bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
 }
 
-.novedades-container {
+.how-to-use-container {
   padding: 40px 5%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.intro-section-novedades {
+.intro-section-how-to {
   text-align: center;
   margin-bottom: 60px;
   max-width: 800px;
@@ -30,25 +28,33 @@
   margin-right: auto;
 }
 
-.intro-section-novedades h1 {
-  font-size: clamp(2.2em, 5vw, 2.8em);
+.intro-section-how-to h1 {
+  font-size: clamp(1.8em, 5vw, 2.8em);
   font-weight: 700;
   margin-bottom: 20px;
 }
 
-.news-grid {
+.intro-section-how-to .highlight {
+  color: var(--highlight-color);
+}
+
+.intro-section-how-to p {
+  font-size: clamp(1em, 2.5vw, 1.1em);
+  opacity: 0.9;
+}
+
+.features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 35px;
   width: 100%;
 }
 
-/* estilo de tarjetas */
-.news-card {
+.feature-card {
   position: relative;
-  background: rgba(44, 39, 68, 0.55);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(44, 39, 68, 0.9); /* Antes 0.55 → más sólido */
+  backdrop-filter: blur(8px); /* Antes 12px → menos blur */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Antes 0.1 → borde más visible */
   border-radius: 15px;
   padding: 35px 30px;
   text-align: center;
@@ -57,7 +63,7 @@
   transform-style: preserve-3d;
 }
 
-.news-card:hover {
+.feature-card:hover {
   --mouse-x: 50%;
   --mouse-y: 50%;
   background: radial-gradient(
@@ -68,7 +74,7 @@
     rgba(44, 39, 68, 0.55);
 }
 
-.news-card::before {
+.feature-card::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -87,7 +93,7 @@
   transition: opacity 0.4s ease;
 }
 
-.news-card:hover::before {
+.feature-card:hover::before {
   opacity: 1;
 }
 
@@ -97,7 +103,7 @@
   }
 }
 
-.news-card .icon {
+.feature-card .icon {
   font-size: 2.8em;
   color: var(--highlight-color);
   margin-bottom: 25px;
@@ -105,24 +111,22 @@
   transition: all 0.3s ease;
 }
 
-.news-card:hover .icon {
-  transform: scale(1.1) translateY(-5px);
+.feature-card:hover .icon {
+  transform: scale(1.1);
   color: #fff;
   text-shadow: 0 0 25px var(--highlight-color);
 }
 
-.news-card h3 {
+.feature-card h3 {
   font-size: 1.4em;
   margin-bottom: 15px;
 }
 
-.news-card p {
+.feature-card p {
   font-size: 0.95em;
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.7;
 }
-
-/* El boton de volver  */
 
 .back-button {
   position: absolute;
@@ -152,6 +156,12 @@
 }
 
 @media (max-width: 768px) {
+  .intro-section-how-to h1 {
+    font-size: 2.2em;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
   .back-button {
     top: 120px;
     left: 15px;

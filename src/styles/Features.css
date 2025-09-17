@@ -14,15 +14,6 @@ body {
   line-height: 1.6;
 }
 
-#particles-js {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-
 .how-to-use-container {
   padding: 40px 5%;
   max-width: 1200px;
@@ -61,7 +52,7 @@ body {
 
 .feature-card {
   position: relative;
-  background: rgba(44, 39, 68, 0.55);
+  background: rgba(44, 39, 68, 0.85);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 15px;
