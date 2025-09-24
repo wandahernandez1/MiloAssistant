@@ -1,0 +1,260 @@
+/* Contenedor principal */
+.edit-profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 20px;
+  background-color: var(--primary-bg-color);
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: var(--text-color);
+}
+
+/* Botón de volver */
+.back-button {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease;
+}
+
+.back-button:hover {
+  color: var(--highlight-color);
+}
+
+/* Card principal */
+.edit-profile-card {
+  background-color: var(--card-bg-color);
+  border-radius: 25px;
+  padding: 60px 40px 40px 40px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.edit-profile-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* Avatar */
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: var(--highlight-color);
+  color: #fff;
+  font-size: 2em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -60px auto 20px auto;
+  border: 4px solid #3a3360;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Header */
+.profile-header h2 {
+  font-size: 2em;
+  margin-bottom: 6px;
+  color: var(--highlight-color);
+  text-align: center;
+}
+
+.profile-header p {
+  font-size: 0.95em;
+  color: #ccc;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Mensajes */
+.message-box {
+  padding: 12px 15px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.95em;
+  text-align: center;
+}
+
+.message-box.success {
+  background-color: rgba(155, 89, 182, 0.2);
+  color: var(--highlight-color);
+}
+
+.message-box.error {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+/* Formulario */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Inputs flotantes con iconos */
+.input-group {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.input-group input {
+  padding: 14px 40px 14px 40px;
+  border-radius: 12px;
+  border: 1px solid var(--input-border-color);
+  background-color: var(--input-bg-color);
+  color: var(--text-color);
+  font-size: 1em;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input::placeholder {
+  color: transparent;
+}
+
+.input-group label {
+  position: absolute;
+  top: 50%;
+  left: 45px;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 0.95em;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 35px;
+  font-size: 0.8em;
+  color: var(--highlight-color);
+  background-color: var(--card-bg-color);
+  padding: 0 4px;
+}
+
+/* Iconos dentro de los inputs */
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1em;
+  color: #aaa;
+  transition: color 0.3s ease;
+}
+
+.input-group input:focus ~ .input-icon {
+  color: var(--highlight-color);
+}
+
+/* Toggle de contraseña */
+.password-group .toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+.password-group .toggle-password:hover {
+  color: var(--highlight-color);
+}
+
+/* Botones */
+.form-actions,
+.delete-account-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.btn {
+  padding: 14px 30px;
+  font-size: 1em;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  border: none;
+  flex: 1;
+  text-align: center;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #9b59b6, #8328a7);
+  color: #fff;
+  box-shadow: 0 6px 15px rgba(155, 89, 182, 0.3);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(155, 89, 182, 0.4);
+}
+
+.danger-btn {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: #fff;
+  box-shadow: 0 6px 15px rgba(231, 76, 60, 0.3);
+}
+
+.danger-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(231, 76, 60, 0.4);
+}
+
+/* Delete section */
+.delete-account-section h3 {
+  color: #e74c3c;
+  margin-bottom: 6px;
+}
+
+.delete-account-section p {
+  font-size: 0.9em;
+  color: #ccc;
+  margin-bottom: 12px;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .edit-profile-card {
+    padding: 40px 25px 25px 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-profile-card {
+    padding: 30px 20px 20px 20px;
+  }
+  .profile-header h2 {
+    font-size: 1.8em;
+  }
+  .profile-header p {
+    font-size: 0.9em;
+  }
+  .input-group input {
+    padding: 12px 40px 12px 40px;
+  }
+  .btn {
+    padding: 12px 0;
+  }
+}
