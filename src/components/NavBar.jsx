@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
+import FunctionalitiesMenu from "./FunctionalitiesMenu";
 
 export default function Navbar({ showProfile }) {
     return (
@@ -9,7 +10,9 @@ export default function Navbar({ showProfile }) {
             </div>
             <nav className="navbar-right">
                 <ul className="nav-links">
-                    <li><Link to="/funcionalidades">Funcionalidades</Link></li>
+                    <li>
+                        <FunctionalitiesMenu />
+                    </li>
                     <li><Link to="/como-usar-milo">Como usar Milo</Link></li>
                     <li><Link to="/novedades">Novedades</Link></li>
                     {showProfile && (

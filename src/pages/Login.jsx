@@ -42,7 +42,7 @@ export default function Login() {
     <div>
       <Navbar />
       <main className="login-container">
-        {/* Aquí puedes mostrar un spinner o un mensaje de carga si lo deseas */}
+
         {loading ? (
           <div>Cargando...</div>
         ) : (
@@ -59,27 +59,27 @@ export default function Login() {
               <h2>Iniciar Sesión</h2>
               <form onSubmit={handleSubmit}>
                 <div className="input-group">
-                  <label htmlFor="email">Correo electrónico</label>
                   <input
                     type="email"
                     id="email"
-                    placeholder="Tu correo"
+                    placeholder=" "
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
+                  <label htmlFor="email">Correo electrónico</label>
                 </div>
 
                 <div className="input-group">
-                  <label htmlFor="password">Contraseña</label>
                   <input
                     type="password"
                     id="password"
-                    placeholder="Tu contraseña"
+                    placeholder=" "
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
+                  <label htmlFor="password">Contraseña</label>
                 </div>
 
                 <button type="submit" className="login-button" disabled={loading}>

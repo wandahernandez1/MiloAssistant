@@ -1,13 +1,13 @@
 import Navbar from "../components/Navbar";
 import Threads from "../components/Threads";
 import miloAvatar from "../assets/milo2.jpg";
-import { useNavigate } from "react-router-dom"; // <-- importar useNavigate
+import { useNavigate } from "react-router-dom";
 export default function Home() {
 
-  const navigate = useNavigate(); // <-- hook de navegación
+  const navigate = useNavigate();
 
   const handleStartClick = () => {
-    navigate("/login"); // <-- redirige a /login
+    navigate("/login");
   };
   return (
     <div style={{ position: "relative", overflow: "hidden" }}>

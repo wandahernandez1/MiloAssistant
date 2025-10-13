@@ -8,12 +8,12 @@ export default function Notes() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [editingNoteId, setEditingNoteId] = useState(null);
-    const [loading, setLoading] = useState(true); // Nuevo estado para la carga
+    const [loading, setLoading] = useState(true);
     const [toast, setToast] = useState({ message: "", type: "" });
 
     const token = localStorage.getItem("token");
 
-    // Función para mostrar mensajes de éxito/error
+
     const showMessage = (message, type = "info") => {
         setToast({ message, type });
         setTimeout(() => setToast({ message: "", type: "" }), 3000);
@@ -69,7 +69,7 @@ export default function Notes() {
         let successMessage = "Nota guardada con éxito.";
 
         if (editingNoteId) {
-            method = "PATCH"; // o 'PUT' según cómo lo hayas configurado
+            method = "PATCH";
             url = `http://localhost:3000/api/notes/${editingNoteId}`;
             successMessage = "Nota actualizada con éxito.";
         }
@@ -90,7 +90,7 @@ export default function Notes() {
                 setTitle("");
                 setContent("");
                 setEditingNoteId(null);
-                fetchNotes(); // Vuelve a cargar las notas para ver el cambio
+                fetchNotes();
             } else {
                 const errorData = await response.json();
                 showMessage("Error: " + (errorData.message || "No se pudo guardar la nota."), "error");
@@ -103,7 +103,7 @@ export default function Notes() {
     const handleEditNote = (note) => {
         setTitle(note.title);
         setContent(note.content);
-        setEditingNoteId(note._id); // Usamos el _id de MongoDB
+        setEditingNoteId(note._id);
         setShowInput(true);
     };
 

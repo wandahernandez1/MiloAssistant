@@ -1,4 +1,4 @@
-// retorno y errores
+
 import { useState, useEffect } from "react";
 import { apiFetch } from "../utils/api.js";
 

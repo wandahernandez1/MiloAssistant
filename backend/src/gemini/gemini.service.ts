@@ -1,81 +1,111 @@
-// src/gemini/gemini.service.ts
-import { Injectable } from '@nestjs/common';
-import fetch from 'node-fetch';
+import { Injectable, Logger } from '@nestjs/common';
+import { GoogleGenAI } from '@google/genai';
 
 @Injectable()
 export class GeminiService {
-  private readonly GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  private readonly logger = new Logger(GeminiService.name);
+  private readonly GEMINI_API_KEY = process.env.GEMINI_API_KEY ?? '';
+  private readonly ai: GoogleGenAI;
 
-  async askGemini(message: string, history: any[] = []): Promise<any> {
+  constructor() {
     if (!this.GEMINI_API_KEY) {
-      return { reply: 'API Key no definida 😥' };
-    } // ✅ Instrucciones para la IA:
-    const systemPrompt = `Eres un asistente personal llamado Milo, y respondes a peticiones del usuario. Tu principal objetivo es identificar la intención de la solicitud y responder con un objeto JSON si la intención es una de las siguientes. Si no, responde con un texto normal y conversacional.
+      this.logger.warn('GEMINI_API_KEY no está definido');
+    }
+    this.ai = new GoogleGenAI({ apiKey: this.GEMINI_API_KEY });
+  }
 
-Intenciones y respuestas en JSON:
-- Si el usuario quiere crear una nota, responde: { "action": "create_note", "title": "[TÍTULO]", "content": "[CONTENIDO]" }
-  - Ejemplos de frases de usuario: "Quiero hacer una nota para la reunión", "anota esto", "crea una nota de compras".
+  async askGemini(
+    message: string,
+    history: { sender: 'user' | 'model'; text: string }[] = [],
+  ): Promise<{
+    reply: string;
+    action: string | null;
+    title?: string;
+    content?: string;
+    location?: string;
+    topic?: string;
+    task?: string;
+    time?: string;
+    description?: string;
+  }> {
+    if (!this.GEMINI_API_KEY) {
+      return { reply: 'API Key no definida 😥', action: null };
+    }
 
-- Si el usuario pregunta por el clima, responde: { "action": "get_weather" }
-  - Ejemplos de frases de usuario: "¿Qué clima hace?", "cómo está el tiempo", "dime el pronóstico".
+    const prompt = `Eres un asistente personal llamado Milo.
+    ... (tus instrucciones) ...`;
 
-- Si el usuario quiere ver noticias, responde: { "action": "get_news" }
-  - Ejemplos de frases de usuario: "noticias de hoy", "dame las novedades locales".
+    const contents = [
+      { role: 'model', parts: [{ text: prompt }] },
+      ...history.map((msg) => ({
+        role: msg.sender === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.text }],
+      })),
+      { role: 'user', parts: [{ text: message }] },
+    ];
 
-- Si el usuario quiere crear un recordatorio, responde: { "action": "get_reminders" }
-  - Ejemplos de frases de usuario: "ponme un recordatorio", "recuérdame..."
+    const fallbackResponses = [
+      'Lo siento, Milo no puede responder ahora 😥',
+      'Estoy un poco ocupado, intenta de nuevo en unos segundos 😅',
+      'No pude procesar tu solicitud, pero sigo aprendiendo 😉',
+    ];
 
-- Si el usuario quiere gestionar tareas, responde: { "action": "get_tasks" }
-  - Ejemplos de frases de usuario: "mis tareas", "lista de pendientes".
+    const maxRetries = 3;
+    const delayMs = 1000;
 
-Si la petición no encaja en estas categorías, responde como un asistente conversacional.`; // ...
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const result = await this.ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents,
+        });
 
-    const formattedHistory = history.map((msg) => ({
-      role: msg.sender === 'user' ? 'user' : 'model',
-      parts: [{ text: msg.text }],
-    }));
+        const candidate = result.candidates?.[0];
+        const replyText = candidate?.content?.parts?.[0]?.text?.trim();
 
-    try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${this.GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [
-              // 👇 IMPORTANTE: el systemPrompt debería ser el primer mensaje
-              { role: 'user', parts: [{ text: systemPrompt }] },
+        this.logger.debug(`Respuesta cruda (intento ${attempt}): ${replyText}`);
 
-              ...formattedHistory,
-              { role: 'user', parts: [{ text: message }] },
-            ],
-          }),
-        },
-      );
+        if (!replyText) {
+          this.logger.warn(
+            `Sin contenido en intento ${attempt}: ${JSON.stringify(result)}`,
+          );
+          throw new Error('No se recibió texto de Gemini');
+        }
 
-      const data = await res.json();
-      const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-      if (!replyText) {
-        return { reply: 'No se pudo obtener una respuesta válida 😅' };
-      } // ✅ Intenta parsear la respuesta como JSON
-      const jsonRegex = /```json\n([\s\S]*?)\n```/;
-      const match = replyText.match(jsonRegex);
-      if (match && match[1]) {
         try {
-          const parsedJson = JSON.parse(match[1]);
-          return parsedJson;
-        } catch (e) {
-          console.error('Error al parsear el JSON:', e);
-          return {
-            reply: 'Milo intentó enviarme una acción, pero no pude entenderla.',
-          };
+          const parsed = JSON.parse(replyText);
+          if (parsed && parsed.action) {
+            return {
+              reply: '',
+              action: parsed.action,
+              title: parsed.title ?? '',
+              content: parsed.content ?? '',
+              location: parsed.location ?? '',
+              topic: parsed.topic ?? '',
+              task: parsed.task ?? '',
+              time: parsed.time ?? '',
+              description: parsed.description ?? '',
+            };
+          }
+        } catch {
+          // No es JSON válido → texto plano
+        }
+
+        return { reply: replyText, action: null };
+      } catch (err) {
+        this.logger.error(`Error en intento ${attempt}`, err);
+        if (attempt < maxRetries) {
+          await new Promise((r) => setTimeout(r, delayMs));
+        } else {
+          const fallback =
+            fallbackResponses[
+              Math.floor(Math.random() * fallbackResponses.length)
+            ];
+          return { reply: fallback, action: null };
         }
       }
-      return { reply: replyText };
-    } catch (err) {
-      console.error(err);
-      return { reply: 'Error al consultar Gemini 😥' };
     }
+
+    return { reply: 'Error inesperado 😵', action: null };
   }
 }

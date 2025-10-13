@@ -107,7 +107,6 @@
   gap: 20px;
 }
 
-/* Inputs flotantes con iconos */
 .input-group {
   position: relative;
   display: flex;
@@ -142,7 +141,7 @@
 
 .input-group input:focus + label,
 .input-group input:not(:placeholder-shown) + label {
-  top: -8px;
+  top: -15px;
   left: 35px;
   font-size: 0.8em;
   color: var(--highlight-color);

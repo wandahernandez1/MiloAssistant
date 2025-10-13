@@ -97,7 +97,6 @@ export function useAuth() {
     const logout = () => {
         localStorage.removeItem("token");
         setCurrentUser(null);
-        // Opcional: Redireccionar al usuario a la página de inicio de sesión
         // navigate("/login");
     };
 

@@ -1,31 +1,18 @@
-
+// src/services/api.js
 export async function askGemini(message, chatHistory = []) {
-    try {
-        const res = await fetch('http://localhost:3000/api/gemini', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem("token") || ""}`
-            },
-            body: JSON.stringify({ message, history: chatHistory }),
-        });
-        const data = await res.json();
-        return {
-            reply: data?.reply || "",
-            action: data?.action || null,
-            title: data?.title || "",
-            content: data?.content || "",
-        };
-    } catch (err) {
-        console.error(err);
-        return {
-            reply: 'No se pudo obtener una respuesta válida 😅',
-            action: null,
-            title: "",
-            content: "",
-        };
-    }
+    const res = await fetch('http://localhost:3000/api/gemini', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem("token") || ""}`
+        },
+        body: JSON.stringify({ message, history: chatHistory }),
+    });
+
+    return res.json();
 }
+
+
 
 export async function getWeather() {
     const API_KEY = "361221015a8e10e6cd9a6d4725732fe4";
@@ -40,9 +27,18 @@ export async function getWeather() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
 
-        return `🌤️ En ${data.name}: ${data.main.temp.toFixed(0)}°C, ${data.weather[0].description}`;
+        // Extraemos más información de la respuesta de la API
+        const temp = data.main.temp.toFixed(0);
+        const feelsLike = data.main.feels_like.toFixed(0);
+        const description = data.weather[0].description;
+        const humidity = data.main.humidity;
+        const windSpeed = (data.wind.speed * 3.6).toFixed(1); // Convertimos de m/s a km/h
+
+        // Unimos toda la información en un mensaje más detallado
+        return `🌤️ En ${data.name}: ${temp}°C (Sensación: ${feelsLike}°C), ${description}. Humedad: ${humidity}%, Viento: ${windSpeed} km/h.`;
     } catch (err) {
-        return `No pude obtener el clima 😥 (${err.message})`;
+        // Mejoramos un poco el mensaje de error para ser más claro
+        return `No pude obtener el clima 😥. Razón: ${err.message}.`;
     }
 }
 
